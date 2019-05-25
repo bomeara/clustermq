@@ -23,7 +23,6 @@ HTCONDOR = R6::R6Class("HTCONDOR",
             opts = private$fill_options(...)
             private$job_id = opts$job_name
             filled = private$fill_template(opts)
-s
             success = system("condor_submit", input=filled, ignore.stdout=TRUE)
             if (success != 0) {
                 print(filled)
