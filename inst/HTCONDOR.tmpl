@@ -1,3 +1,5 @@
 should_transfer_files = YES
+queue 1
+executable = /usr/bin/R
 
-CMQ_AUTH={{ auth }} R --no-save --no-restore -e 'clustermq:::worker("{{ master }}")'
+arguments = --no-save --no-restore -e 'clustermq:::worker("{{ master }}")'
