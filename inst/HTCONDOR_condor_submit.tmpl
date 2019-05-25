@@ -1,0 +1,5 @@
+should_transfer_files = YES
+executable = /usr/local/bin/R
+
+arguments = --no-save --no-restore -e 'clustermq:::worker(\"{{ master }}\")'
+queue 1

@@ -1,5 +1,7 @@
-should_transfer_files = YES
-executable = /usr/local/bin/R
+#PBS -N {{ job_name }}
+#PBS -l nodes={{ n_jobs }}:ppn={{ cores | 1 }}
+#PBS -o {{ log_file | /dev/null }}
+#PBS -j oe
 
-arguments = --no-save --no-restore -e 'clustermq:::worker("{{ master }}")'
-queue 1
+ulimit -v $(( 1024 * {{ memory | 4096 }} ))
+CMQ_AUTH={{ auth }} R --no-save --no-restore -e 'clustermq:::worker("{{ master }}")'
