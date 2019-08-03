@@ -2,6 +2,6 @@ universe = vanilla
 output = {{job_name}}.out
 error = {{job_name}}.err
 log = {{job_name}}.log
-executable = R
+executable = /usr/bin/R
 arguments = --no-save --no-restore -e 'clustermq:::worker("{{ master }}")'
 queue 1
