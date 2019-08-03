@@ -8,7 +8,7 @@
 #' options(clustermq.scheduler="HTCONDOR")
 #' library(clustermq)
 #' library(foreach)
-#' register_dopar_cmq(n_jobs=2, memory=1024) # accepts same arguments as `workers`
+#' register_dopar_cmq(n_jobs=2) 
 #' foreach(i=1:3) %dopar% sqrt(i) # this will be executed as jobs
 #' }
 HTCONDOR = R6::R6Class("HTCONDOR",
