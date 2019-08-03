@@ -23,7 +23,7 @@ HTCONDOR = R6::R6Class("HTCONDOR",
             opts = private$fill_options(...)
             private$job_id = opts$job_name
             filled = private$fill_template(opts)
-            success = system("condor_qsub", input=filled, ignore.stdout=TRUE)
+            success = system("condor_submit", input=filled, ignore.stdout=TRUE)
             if (success != 0) {
                 print(filled)
                 stop("Job submission failed with error code ", success)
