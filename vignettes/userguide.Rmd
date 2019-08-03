@@ -89,11 +89,11 @@ processing. This will work in most, but not all cases.
 
 To set up a scheduler explicitly,  see the following links:
 
-* [LSF](LSF)
-* [SGE](SGE)
-* [Slurm](SLURM)
-* [Torque](Torque)
-* [PBS](PBS)
+* [LSF](#LSF)
+* [SGE](#SGE)
+* [Slurm](#SLURM)
+* [Torque](#Torque)
+* [PBS](#PBS)
 * if you want another scheduler, [open an
   issue](https://github.com/mschubert/clustermq/issues/new)
 
@@ -184,17 +184,16 @@ fx = function(x) x * 2 + y
 Q(fx, x=1:3, export=list(y=10), n_jobs=1)
 ```
 
-If we want to use a package function we need to load it on the worker using a
-`library()` call or referencing it with `package_name::`:
+If we want to use a package function we need to load it on the worker using the
+`pkg` argument or referencing it with `package_name::`:
 
 ```{r}
 fx = function(x) {
-    library(dplyr)
     x %>%
         mutate(area = Sepal.Length * Sepal.Width) %>%
         head()
 }
-Q(fx, x=list(iris), n_jobs=1)
+Q(fx, x=list(iris), pkgs="dplyr", n_jobs=1)
 ```
 
 ### As parallel `foreach` backend
@@ -336,6 +335,22 @@ options(clustermq.ssh.log = "~/ssh_proxy.log")
 This will create a log file *on the remote server* that will contain any errors
 that might have occurred during `ssh_proxy` startup.
 
+If the `ssh_proxy` startup fails on your local machine with the error
+
+```
+Remote R process did not respond after 5 seconds. Check your SSH server log.
+```
+
+but the server log does not show any errors, then you can try increasing the
+timeout:
+
+```{r eval=FALSE}
+options(clustermq.ssh.timeout = 10) # or a higher number
+```
+
+This can happens when your SSH startup template includes additional steps
+before starting R, such as activating a module or conda environment.
+
 ## Environments
 
 In some cases, it may be necessary to activate a specific computing environment
@@ -351,7 +366,7 @@ Examples for such environments or containers are:
 
 It should be possible to activate them in the job submission script (i.e., the
 template file). This is widely untested, but would look the following for the
-[LSF](LSF) scheduler (analogous for others):
+[LSF](#LSF) scheduler (analogous for others):
 
 ```r
 #BSUB-J {{ job_name }}[1-{{ n_jobs }}]  # name of the job / array jobs
@@ -385,7 +400,7 @@ options(
 
 ## Scheduler templates
 
-### LSF
+### LSF {#LSF}
 
 In your `~/.Rprofile` on your computing cluster, set the following options:
 
@@ -433,7 +448,7 @@ In this file, `#BSUB-*` defines command-line arguments to the `bsub` program.
 Once this is done, the package will use your settings and no longer warn you of
 the missing options.
 
-### SGE
+### SGE {#SGE}
 
 In your `~/.Rprofile` on your computing cluster, set the following options:
 
@@ -473,7 +488,7 @@ In this file, `#$-*` defines command-line arguments to the `qsub` program.
 Once this is done, the package will use your settings and no longer warn you of
 the missing options.
 
-### SLURM
+### SLURM {#SLURM}
 
 In your `~/.Rprofile` on your computing cluster, set the following options:
 
@@ -514,7 +529,7 @@ In this file, `#SBATCH` defines command-line arguments to the `sbatch` program.
 Once this is done, the package will use your settings and no longer warn you of
 the missing options.
 
-### PBS
+### PBS {#PBS}
 
 In your `~/.Rprofile` on your computing cluster, use the SGE scheduler with a
 PBS template:
@@ -553,7 +568,7 @@ In this file, `#PBS-*` defines command-line arguments to the `qsub` program.
 Once this is done, the package will use your settings and no longer warn you of
 the missing options.
 
-### Torque
+### Torque {#Torque}
 
 In your `~/.Rprofile` on your computing cluster, use the SGE scheduler with a
 Torque template:

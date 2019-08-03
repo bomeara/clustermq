@@ -20,8 +20,8 @@
 #' }
 Q_rows = function(df, fun, const=list(), export=list(), pkgs=c(), seed=128965,
         memory=NULL, template=list(), n_jobs=NULL, job_size=NULL,
-        rettype="list", fail_on_error=TRUE, workers=NULL,
-        log_worker=FALSE, chunk_size=NA, timeout=Inf, max_calls_worker=Inf) {
+        rettype="list", fail_on_error=TRUE, workers=NULL, log_worker=FALSE,
+        chunk_size=NA, timeout=Inf, max_calls_worker=Inf, verbose=TRUE) {
 
     # check if call args make sense
     if (!is.null(memory))
@@ -47,16 +47,19 @@ Q_rows = function(df, fun, const=list(), export=list(), pkgs=c(), seed=128965,
         n_jobs = Reduce(min, c(ceiling(n_calls / job_size), n_jobs, n_calls))
 
         workers = workers(n_jobs, data=data, reuse=FALSE, template=template,
-                          log_worker=log_worker)
+                          log_worker=log_worker, verbose=verbose)
     } else
         do.call(workers$set_common_data, data)
 
-    # use heuristic for wait and chunk size
+    # heuristic for chunk size
     if (is.na(chunk_size))
-        chunk_size = ceiling(min(
-            n_calls / 2000,
-            1e4 * n_calls / utils::object.size(df)[[1]]
-        ))
+        chunk_size = round(Reduce(min, c(
+            500,                    # never more than 500
+            n_calls / n_jobs / 100, # each worker reports back 100 times
+            n_calls / 2000,         # at least 2000 reports total
+            1e4 * n_calls / utils::object.size(df)[[1]] # no more than 10 kb
+        )))
+    chunk_size = max(chunk_size, 1)
 
     # process calls
     if (class(workers)[1] == "LOCAL") {
@@ -72,6 +75,7 @@ Q_rows = function(df, fun, const=list(), export=list(), pkgs=c(), seed=128965,
             stop("Attempting to use workers object without active workers")
         master(qsys=workers, iter=df, rettype=rettype,
                fail_on_error=fail_on_error, chunk_size=chunk_size,
-               timeout=timeout, max_calls_worker=max_calls_worker)
+               timeout=timeout, max_calls_worker=max_calls_worker,
+               verbose=verbose)
     }
 }

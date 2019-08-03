@@ -4,6 +4,7 @@ ClusterMQ: send R function calls as cluster jobs
 [![CRAN version](http://www.r-pkg.org/badges/version/clustermq)](https://cran.r-project.org/package=clustermq)
 [![Build Status](https://travis-ci.org/mschubert/clustermq.svg?branch=master)](https://travis-ci.org/mschubert/clustermq)
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/clustermq)](http://cran.rstudio.com/web/packages/clustermq/index.html)
+[![DOI](https://zenodo.org/badge/DOI/10.1093/bioinformatics/btz284.svg)](https://doi.org/10.1093/bioinformatics/btz284)
 
 This package will allow you to send function calls as jobs on a computing
 cluster with a minimal interface provided by the `Q` function:
@@ -160,3 +161,14 @@ Use [Snakemake](https://snakemake.readthedocs.io/en/latest/) or
 Don't use [`batch`](https://cran.r-project.org/web/packages/batch/index.html)
 (last updated 2013) or [`BatchJobs`](https://github.com/tudo-r/BatchJobs)
 (issues with SQLite on network-mounted storage).
+
+Citation
+--------
+
+This project is part of my academic work, for which I will be evaluated on
+citations. If you like me to be able to continue working on research support
+tools like `clustermq`, please cite the article when using it for publications:
+
+> M Schubert. clustermq enables efficient parallelisation of genomic analyses.
+> *Bioinformatics* (2019).
+> [doi:10.1093/bioinformatics/btz284](https://doi.org/10.1093/bioinformatics/btz284)
